@@ -1,0 +1,59 @@
+version: "0.1"
+
+subdomains:
+  fider-subdomain:
+    module: nullstone/gcp-nullstone-subdomain
+    dns:
+      template: "{{ NULLSTONE_ORG }}-fider.{{ NULLSTONE_ENV }}"
+
+apps:
+  fider:
+    module: nullstone/gcp-gke-service
+    vars:
+      replicas: 1
+      cpu: "0.5"
+      memory: "512Mi"
+      container_port: 3000
+      service_port: 80
+    connections:
+      cluster-namespace: namespace0
+    capabilities:
+      postgres:
+        module: nullstone/gcp-postgres-access
+        connections:
+          postgres: postgres0
+      jwt-key:
+        module: nullstone/jwt-keys
+    environment:
+      BASE_URL: "{{ NULLSTONE_ORG }}-fider.nullstone.app"
+      DATABASE_URL: "{{ POSTGRES_URL }}" # from nullstone/gcp-postgres-access
+      JWT_SECRET: "{{ JWT_PRIVATE_KEY }}" # from nullstone/jwt-keys
+      # Update EMAIL env vars to enable mailer
+      EMAIL_NOREPLY: "noreply@fider-example.io"
+      EMAIL_SMTP_HOST: "smtp.fider-example.io"
+      EMAIL_SMTP_PORT: "587"
+      EMAIL_SMTP_USERNAME: ""
+      EMAIL_SMTP_PASSWORD: ""
+      EMAIL_SMTP_ENABLE_STARTTLS: "true"
+
+datastores:
+  postgres0:
+    module: nullstone/gcp-cloudsql-postgres
+    connections:
+      network: network0
+
+cluster_namespaces:
+  namespace0:
+    module: nullstone/gcp-gke-namespace
+    connections:
+      cluster: cluster0
+
+clusters:
+  cluster0:
+    module: nullstone/gcp-gke
+    connections:
+      network: network0
+
+networks:
+  network0:
+    module: nullstone/gcp-network
