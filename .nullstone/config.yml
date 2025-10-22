@@ -24,6 +24,12 @@ apps:
           postgres: postgres0
       jwt-key:
         module: nullstone/jwt-keys
+      load-balancer:
+        module: nullstone/gcp-gke-dedicated-load-balancer
+        vars:
+          enable_https: true
+        connections:
+          subdomain: fider-subdomain
     environment:
       BASE_URL: "{{ NULLSTONE_ORG }}-fider.nullstone.app"
       DATABASE_URL: "{{ POSTGRES_URL }}" # from nullstone/gcp-postgres-access
