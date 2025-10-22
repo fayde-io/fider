@@ -32,7 +32,7 @@ apps:
         connections:
           subdomain: fider-subdomain
     environment:
-      BASE_URL: "{{ NULLSTONE_ORG }}-fider.nullstone.app"
+      BASE_URL: "https://fayde-fider.{{ NULLSTONE_ENV }}.nullstone.app"
       DATABASE_URL: "{{ POSTGRES_URL }}" # from nullstone/gcp-postgres-access
       JWT_SECRET: "{{ JWT_PRIVATE_KEY }}" # from nullstone/jwt-keys
       # Update EMAIL env vars to enable mailer

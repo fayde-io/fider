@@ -1,0 +1,6 @@
+version: "0.1"
+
+apps:
+  fider:
+    environment:
+      BASE_URL: "https://fayde-fider.nullstone.app"
