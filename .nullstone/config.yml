@@ -28,6 +28,7 @@ apps:
         module: nullstone/gcp-gke-dedicated-load-balancer
         vars:
           enable_https: true
+          health_check_path: /_health
         connections:
           subdomain: fider-subdomain
     environment:
